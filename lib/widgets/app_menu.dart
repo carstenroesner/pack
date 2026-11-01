@@ -1,7 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../engine/engine.dart';
 import '../screens/feature_overview_screen.dart';
+import '../services/game_settings.dart';
+
+const String _saveKey = 'knarz_savegame';
 
 const String _repoOwner = 'carstenroesner';
 const String _repoName = 'point_and_click_adventure';
@@ -10,12 +18,60 @@ const String _repoName = 'point_and_click_adventure';
 class AppMenu extends StatelessWidget {
   const AppMenu({super.key});
 
+  Future<void> _save(BuildContext context) async {
+    final engine = context.read<GameEngine>();
+    final messenger = ScaffoldMessenger.of(context);
+    if (!engine.canSave) {
+      messenger.showSnackBar(const SnackBar(content: Text('Gerade nicht möglich.')));
+      return;
+    }
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_saveKey, jsonEncode(engine.toJson()));
+      messenger.showSnackBar(const SnackBar(content: Text('Gespeichert.')));
+    } catch (_) {
+      messenger.showSnackBar(const SnackBar(content: Text('Speichern ist fehlgeschlagen.')));
+    }
+  }
+
+  Future<void> _load(BuildContext context) async {
+    final engine = context.read<GameEngine>();
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_saveKey);
+      if (raw == null) {
+        messenger.showSnackBar(const SnackBar(content: Text('Kein Spielstand vorhanden.')));
+        return;
+      }
+      final ok = engine.loadJson(jsonDecode(raw) as Map<String, dynamic>);
+      messenger.showSnackBar(
+        SnackBar(content: Text(ok ? 'Spielstand geladen.' : 'Spielstand passt nicht zum Spiel.')),
+      );
+    } catch (_) {
+      messenger.showSnackBar(const SnackBar(content: Text('Laden ist fehlgeschlagen.')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final retro = context.watch<GameSettings>().retro;
     return PopupMenuButton<String>(
       tooltip: 'Menü',
       onSelected: (value) {
         switch (value) {
+          case 'save':
+            _save(context);
+            break;
+          case 'load':
+            _load(context);
+            break;
+          case 'restart':
+            context.read<GameEngine>().newGame();
+            break;
+          case 'retro':
+            context.read<GameSettings>().toggleRetro();
+            break;
           case 'features':
             Navigator.of(context).push(
               MaterialPageRoute<void>(
@@ -37,10 +93,18 @@ class AppMenu extends StatelessWidget {
             break;
         }
       },
-      itemBuilder: (_) => const [
-        PopupMenuItem(value: 'features', child: Text('Funktionsumfang')),
-        PopupMenuItem(value: 'report', child: Text('Problem melden')),
-        PopupMenuItem(value: 'about', child: Text('Über diese App')),
+      itemBuilder: (_) => [
+        const PopupMenuItem(value: 'save', child: Text('Spiel speichern')),
+        const PopupMenuItem(value: 'load', child: Text('Spiel laden')),
+        const PopupMenuItem(value: 'restart', child: Text('Neu starten')),
+        PopupMenuItem(
+          value: 'retro',
+          child: Text(retro ? 'Retro-Ansicht: aus' : 'Retro-Ansicht: an'),
+        ),
+        const PopupMenuDivider(),
+        const PopupMenuItem(value: 'features', child: Text('Funktionsumfang')),
+        const PopupMenuItem(value: 'report', child: Text('Problem melden')),
+        const PopupMenuItem(value: 'about', child: Text('Über diese App')),
       ],
     );
   }

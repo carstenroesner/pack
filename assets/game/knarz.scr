@@ -1,0 +1,566 @@
+// Knarz Manor - ein Adventure fuer die eigene Engine.
+// Alle Positionen sind Raumeinheiten: Der Raum ist 1000 hoch und 1600 breit.
+// Die Zeichnung besteht aus Vektorformen und laeuft in jeder Aufloesung.
+
+spiel "Knarz Manor"
+kontur #120B1C
+start garten start
+spieler mina
+
+// Die Verbtafel liest sich spaltenweise, vier Zeilen pro Spalte.
+verb oeffne "Öffne"
+verb schliesse "Schließe"
+verb druecke "Drücke"
+verb ziehe "Ziehe"
+verb gehe "Gehe zu"
+verb nimm "Nimm"
+verb rede "Rede mit"
+verb gib "Gib" mit "an"
+verb benutze "Benutze" mit "mit"
+verb schau "Schau an"
+verb mach_an "Mach an"
+verb mach_aus "Mach aus"
+
+figur mina "Mina Moderschein" farbe #FF7A6B
+figur rabe "Rabe Edgar" farbe #B9A8FF
+figur knarz "Herr von Knarz" farbe #9FE8FF
+figur gerda "Spinne Gerda" farbe #A8FF9A
+
+gegenstand schere "Gartenschere"
+    beschreibung "Scharf genug für Hecken, stumpf genug für Ausreden."
+gegenstand knopf "Messingknopf"
+    beschreibung "Er glänzt so sehr, dass er fast schreit."
+gegenstand schluessel "Rostiger Schlüssel"
+    beschreibung "Er passt garantiert in eine Tür. Hoffentlich in die richtige."
+gegenstand streichhoelzer "Streichhölzer"
+    beschreibung "Drei Stück. Eines davon sieht verdächtig feucht aus."
+gegenstand kerze "Kerzenstummel"
+    beschreibung "Ein Rest. Aber einer mit Charakter."
+gegenstand kelle "Schöpfkelle"
+    beschreibung "Zum Schöpfen. Und, wie ich vermute, zum Angeln."
+gegenstand kette "Rasselkette"
+    beschreibung "Sie rasselt schon, wenn ich sie nur ansehe."
+
+standard oeffne "Das lässt sich nicht öffnen." "Ich öffne nur Dinge, die dafür gebaut wurden." "Nein. Und ich habe es wirklich versucht."
+standard schliesse "Das ist schon so zu, wie es nur geht." "Zumachen? Da gibt es nichts zuzumachen."
+standard druecke "Drücken bringt nichts. Außer vielleicht Muskelkater." "Nichts passiert. Es ist nicht einmal ein Knopf."
+standard ziehe "Das bewegt sich keinen Millimeter." "Ziehen hilft nicht. Schieben auch nicht, ich habe geprüft."
+standard nimm "Das nehme ich nicht mit." "Zu schwer, zu fest, zu peinlich." "Das gehört bestimmt jemandem. Wahrscheinlich einem Geist."
+standard rede "Keine Antwort. Wie überraschend." "Ich rede ungern mit Dingen. Sie antworten nie."
+standard gib "Das will keiner haben." "Damit macht sich hier niemand Freunde."
+standard benutze "Das passt nicht zusammen." "Das funktioniert nicht. Ich bin selbst überrascht." "Mir fällt dazu nichts ein."
+standard mach_an "Das lässt sich nicht anmachen." "Hier ist kein Schalter. Hier ist gar nichts."
+standard mach_aus "Das ist weder an, noch kann ich es ausmachen."
+standard * "Das geht nicht."
+
+// ======================================================================
+// Garten
+// ======================================================================
+
+raum garten "Vor dem Haus"
+    groesse 1600
+    himmel #14103A #6B3F7D
+    boden #2E4B2B ab 700
+    lauf 90,790 1500,790 1570,965 30,965
+    marke start 300 900
+    marke vor_tuer 1150 810
+    marke bei_hecke 630 810
+    marke bei_rabe 760 810
+
+    // Sterne und Mond
+    kreis 120 90 5 #FFF6C8 -
+    kreis 340 160 4 #FFF6C8 -
+    kreis 520 70 6 #FFF6C8 -
+    kreis 700 190 4 #FFF6C8 -
+    kreis 880 80 5 #FFF6C8 -
+    kreis 60 300 4 #FFF6C8 -
+    kreis 560 330 3 #FFF6C8 -
+    kreis 1480 60 5 #FFF6C8 -
+    kreis 1290 160 90 #F6EBC4
+    kreis 1260 140 18 #E3D6A6 -
+    kreis 1320 200 12 #E3D6A6 -
+
+    // Ferne Hügel
+    pfad #1F1A3E - "M0 700 Q200 540 450 650 Q700 740 900 630 Q1150 520 1400 630 Q1520 680 1600 640 L1600 740 L0 740 Z"
+
+    // Das Haus
+    rechteck 830 340 670 420 #3D3160
+    vieleck #2A2142 800,350 1165,160 1530,350
+    rechteck 1340 190 60 120 #2A2142
+    rechteck 840 250 110 520 #473B72
+    vieleck #2A2142 820,260 895,110 970,260
+    rechteck 875 330 40 70 #F4C95D
+    rechteck 1000 420 80 110 #F4C95D
+    rechteck 1036 420 8 110 #3D3160 -
+    rechteck 1260 420 80 110 #F4C95D
+    rechteck 1296 420 8 110 #3D3160 -
+    kreis 1165 270 42 #F4C95D
+    rechteck 1161 228 8 84 #3D3160 -
+    rechteck 1050 752 230 30 #5A4B6E
+
+    // Weg zur Tür
+    vieleck #6E5F78 - 1080,785 1250,785 1380,1000 900,1000
+
+    // Zaun mit Pfosten
+    rechteck 200 650 600 14 #55402F
+    rechteck 200 710 600 14 #55402F
+    rechteck 250 610 26 170 #55402F
+    rechteck 440 610 26 170 #55402F
+    rechteck 730 590 56 200 #5E4632
+
+    // Toter Baum
+    pfad #2A1F2E "M205 790 Q190 520 215 400 Q225 330 190 250 L235 290 Q270 360 262 430 Q285 540 270 790 Z"
+    pfad #2A1F2E "M215 430 Q150 400 110 320 L145 320 Q185 370 230 395 Z"
+    pfad #2A1F2E "M255 400 Q310 360 330 290 L300 285 Q285 335 245 365 Z"
+
+    objekt tor "Eisentor"
+        klickkasten 20 560 170 240
+        beschreibung "Ein Eisentor, so rostig, dass es nur noch aus Gewohnheit steht."
+        rechteck 25 580 14 210 #3A3A48
+        rechteck 80 580 14 210 #3A3A48
+        rechteck 135 580 14 210 #3A3A48
+        rechteck 180 580 14 210 #3A3A48
+        rechteck 25 600 168 12 #3A3A48
+        rechteck 25 740 168 12 #3A3A48
+        bei gehe:
+            sage "Zurück ist keine Option. Die Reportage schreibt sich nicht von allein."
+        bei oeffne:
+            sage "Das Tor ist zugerostet. Es will wohl, dass ich bleibe."
+
+    objekt bank "Gartenbank"
+        klickkasten 330 680 190 125
+        beschreibung "Eine Bank. Sie hat schon bessere Jahrhunderte gesehen."
+        rechteck 340 690 170 18 #6B4A2E
+        rechteck 340 735 170 22 #6B4A2E
+        rechteck 350 755 14 40 #6B4A2E
+        rechteck 486 755 14 40 #6B4A2E
+
+    objekt schere_o "Gartenschere"
+        klickkasten 385 690 65 50
+        beschreibung "Eine Gartenschere. Jemand hat sie vergessen. Oder fliehen müssen."
+        vieleck #C8C8D8 395,732 430,700 438,706 405,738
+        kreis 392 738 10 #D83A3A
+        bei nimm:
+            sage "Die kann ich bestimmt brauchen."
+            gib schere
+            verstecke
+
+    objekt hecke "Hecke"
+        klickkasten 540 600 190 195
+        ziel bei_hecke
+        beschreibung "Eine wuchernde Hecke. Etwas Messingfarbenes blitzt zwischen den Blättern."
+        ellipse 630 700 100 90 #2F6B34
+        kreis 560 725 55 #2F6B34
+        kreis 700 725 55 #2F6B34
+        kreis 630 645 62 #2F6B34
+        wenn nicht hecke_geschnitten:
+            vieleck #FFE9A0 - 620,690 632,672 644,690 632,708
+        wenn hecke_geschnitten:
+            ellipse 630 710 55 45 #17331B
+        bei schau:
+            wenn hecke_geschnitten:
+                sage "Jetzt sieht sie aus, als hätte sie einen Friseurtermin gehabt."
+            sonst:
+                sage "Eine wuchernde Hecke. Etwas Messingfarbenes blitzt zwischen den Blättern."
+        bei benutze mit schere:
+            wenn hecke_geschnitten:
+                sage "Mehr Hecke gibt es nicht. Ich habe nachgesehen."
+            sonst:
+                sage "Schnipp, schnapp. Mal sehen, was da glänzt."
+                warte 0.4
+                setze hecke_geschnitten
+                gib knopf
+                sage "Ein Messingknopf! Den hat jemand auf der Flucht verloren."
+
+    objekt rabe "Rabe Edgar"
+        klickkasten 700 480 120 130
+        ziel bei_rabe
+        beschreibung "Ein Rabe auf einem Zaunpfosten. Er mustert mich, als wäre ich das Abendessen."
+        vieleck #1E1B2E 725,555 695,605 742,582
+        ellipse 758 545 36 44 #1E1B2E
+        kreis 775 500 20 #1E1B2E
+        vieleck #E8A33D 790,498 817,506 790,513
+        kreis 780 496 4 #FFFFFF -
+        bei rede:
+            dialog rabe
+        bei nimm:
+            sage "Edgar sieht mich an. Ich nehme ihn lieber nicht mit."
+        bei gib mit knopf:
+            starte rabe_tausch
+        bei benutze mit knopf:
+            starte rabe_tausch
+
+    objekt kuerbis "Kürbis"
+        klickkasten 1275 710 110 90
+        beschreibung "Ein Kürbis mit Grinsen. Er scheint den Spaß seines Lebens zu haben."
+        ellipse 1330 760 52 42 #E8721C
+        vieleck #FFD84A - 1305,748 1325,748 1315,730
+        vieleck #FFD84A - 1340,748 1360,748 1350,730
+        vieleck #FFD84A - 1305,768 1360,768 1345,782 1320,782
+        bei nimm:
+            sage "Zu schwer. Und er grinst mich dabei an."
+        bei rede:
+            sage "Der Kürbis grinst weiter. Ein Gesprächspartner mit Haltung."
+
+    objekt haustuer "Haustür"
+        klickkasten 1090 530 150 240
+        ziel vor_tuer
+        beschreibung "Eine schwere Holztür. Darüber hängt ein Schild: Bitte nicht klopfen. Die Bewohner sind nervös."
+        wenn nicht tuer_offen:
+            rechteck 1100 540 130 220 #6B3A22
+            rechteck 1115 560 45 80 #5A2F1B
+            rechteck 1170 560 45 80 #5A2F1B
+            rechteck 1115 660 45 80 #5A2F1B
+            rechteck 1170 660 45 80 #5A2F1B
+            kreis 1212 660 9 #D8B04A
+        wenn tuer_offen:
+            rechteck 1100 540 130 220 #120A18
+            vieleck #3A2A1A 1100,540 1140,550 1140,750 1100,760
+        bei oeffne:
+            wenn tuer_offen:
+                raum halle start
+            sonst:
+                sage "Abgeschlossen. Sie hat einen Schlüssel verdient."
+        bei gehe:
+            wenn tuer_offen:
+                raum halle start
+            sonst:
+                sage "Abgeschlossen."
+        bei benutze mit schluessel:
+            wenn tuer_offen:
+                sage "Sie ist doch schon offen."
+            sonst:
+                sage "Es knirscht, es knackt, und dann springt das Schloss auf."
+                setze tuer_offen
+                sage "Wer hätte gedacht, dass Rost ein Schlüsselmaterial ist."
+        bei druecke:
+            sage "Drücken allein reicht nicht. Sie ist abgeschlossen."
+
+// ======================================================================
+// Halle
+// ======================================================================
+
+raum halle "Eingangshalle"
+    groesse 1600
+    himmel #3A2A52 #2A1E3C
+    boden #5B3A2E ab 640
+    lauf 70,780 1530,780 1570,965 30,965
+    marke start 200 880
+    marke von_kueche 1380 880
+    marke bei_knarz 1180 880
+    marke bei_kandelaber 900 810
+    dunkel nicht halle_hell
+
+    rechteck 0 480 1600 160 #4B3558 -
+    // Fenster mit Vorhängen
+    rechteck 560 130 130 260 #172457
+    rechteck 620 130 10 260 #3A2A52 -
+    rechteck 560 250 130 10 #3A2A52 -
+    kreis 600 200 22 #F6EBC4 -
+    vieleck #7A2E3F 535,120 570,120 570,400 535,425
+    vieleck #7A2E3F 715,120 680,120 680,400 715,425
+    // Teppich
+    ellipse 800 885 560 70 #7A2E3F
+    // Spinnweben
+    pfad - #CFCFE8 dick 2 "M0 0 Q80 40 90 130 M0 0 Q40 90 0 170 M0 50 Q45 60 62 100"
+    pfad - #CFCFE8 dick 2 "M1600 0 Q1520 40 1510 130 M1600 0 Q1560 90 1600 170 M1600 50 Q1555 60 1538 100"
+    // Konsolentisch
+    rechteck 400 660 240 24 #5E4632
+    rechteck 420 684 20 100 #5E4632
+    rechteck 600 684 20 100 #5E4632
+
+    objekt tuer_zurueck "Haustür"
+        klickkasten 90 390 170 330
+        beschreibung "Die Tür nach draußen. Dort ist es dunkler, aber ehrlicher."
+        rechteck 100 400 150 300 #6B3A22
+        rechteck 115 420 55 100 #5A2F1B
+        rechteck 180 420 55 100 #5A2F1B
+        kreis 232 560 9 #D8B04A
+        bei gehe:
+            raum garten vor_tuer
+        bei oeffne:
+            raum garten vor_tuer
+
+    objekt bild "Gemälde"
+        klickkasten 1020 160 120 200
+        beschreibung "Ein Familienporträt. Alle Augen folgen mir. Auch die vom Hund."
+        rechteck 1020 160 120 200 #8C6A2F
+        rechteck 1034 174 92 172 #2F2745
+        ellipse 1080 230 28 36 #CFC6A8
+        rechteck 1052 270 56 74 #4A3A60
+        bei nimm:
+            sage "Das Bild hängt fest. Oder es mag mich nicht."
+
+    objekt streichhoelzer_o "Streichhölzer"
+        klickkasten 475 625 65 40
+        beschreibung "Eine kleine Schachtel Streichhölzer auf dem Tisch. Sehr hilfsbereit."
+        rechteck 480 636 52 24 #E8E0C0
+        rechteck 480 636 52 8 #C84A32
+        bei nimm:
+            sage "Streichhölzer. Mit ein bisschen Glück trocken."
+            gib streichhoelzer
+            verstecke
+
+    objekt kandelaber "Kandelaber"
+        klickkasten 830 360 140 420
+        ziel bei_kandelaber
+        beschreibung "Ein Kandelaber. Er sieht aus, als würde ihm etwas fehlen. Zum Beispiel Licht."
+        ellipse 900 770 50 14 #3E3A4A
+        rechteck 890 460 20 310 #8C8CA0
+        pfad - #8C8CA0 dick 10 "M900 520 Q840 520 840 470 M900 520 Q960 520 960 470"
+        rechteck 876 446 48 14 #8C8CA0
+        wenn kerze_steckt:
+            rechteck 890 390 20 56 #F2E8C9
+        wenn halle_hell:
+            kreis 900 380 120 #FFE08A33 -
+            ellipse 900 372 11 22 #FFB02E
+        bei schau:
+            wenn halle_hell:
+                sage "Jetzt brennt die Kerze. Und das Haus hat endlich Licht."
+            sonst:
+                wenn kerze_steckt:
+                    sage "Die Kerze steckt. Jetzt fehlt nur noch Feuer."
+                sonst:
+                    sage "Ein Kandelaber. Er sieht aus, als würde ihm etwas fehlen. Zum Beispiel Licht."
+        bei benutze mit kerze:
+            wenn kerze_steckt:
+                sage "Es steckt schon eine Kerze drauf."
+            sonst:
+                entferne kerze
+                setze kerze_steckt
+                sage "Perfekt. Sie sitzt, als hätte sie dort immer gesessen."
+        bei benutze mit streichhoelzer:
+            wenn halle_hell:
+                sage "Es brennt doch schon."
+            sonst:
+                wenn kerze_steckt:
+                    starte anzuenden
+                sonst:
+                    sage "Ich kann nichts anzünden, was nicht da ist."
+        bei mach_an:
+            wenn halle_hell:
+                sage "Es brennt doch schon."
+            sonst:
+                wenn kerze_steckt und hat streichhoelzer:
+                    starte anzuenden
+                sonst:
+                    sage "Dafür fehlt mir noch etwas."
+
+    objekt knarz "Herr von Knarz"
+        versteckt
+        klickkasten 1150 380 170 380
+        ziel bei_knarz
+        beschreibung "Ein Geist in Schlafrock und Pantoffeln. Er sieht müde aus. Das ist bei Geistern selten."
+        pfad #CFE8FFB0 #FFFFFF66 "M1180 420 Q1230 360 1280 420 Q1310 520 1300 640 Q1290 700 1270 740 Q1250 700 1230 740 Q1210 700 1190 740 Q1170 700 1160 640 Q1150 520 1180 420 Z"
+        ellipse 1210 480 10 16 #1A1230 -
+        ellipse 1250 480 10 16 #1A1230 -
+        ellipse 1230 530 14 20 #1A1230 -
+        bei rede:
+            dialog knarz
+        bei gib mit kette:
+            entferne kette
+            sage knarz "Meine Kette! Sie rasselt noch. Wie schön, dass etwas hier noch Lärm macht."
+            sage knarz "Dreihundert Jahre ohne Kette. Man kommt sich so lächerlich vor."
+            sage "Gern geschehen."
+            spielende "Herr von Knarz rasselt zufrieden in die Nacht. Das Haus wird still, der Kürbis grinst, und Mina hat die beste Reportage ihres Lebens. Ende von Knarz Manor."
+
+    objekt kuechentuer "Küchentür"
+        klickkasten 1420 390 150 330
+        ziel von_kueche
+        beschreibung "Die Tür zur Küche. Dahinter riecht es nach Suppe und Vergangenheit."
+        rechteck 1430 400 130 300 #6B3A22
+        rechteck 1445 420 45 100 #5A2F1B
+        rechteck 1500 420 45 100 #5A2F1B
+        kreis 1448 560 9 #D8B04A
+        bei gehe:
+            raum kueche start
+        bei oeffne:
+            raum kueche start
+
+// ======================================================================
+// Küche
+// ======================================================================
+
+raum kueche "Küche"
+    groesse 1600
+    himmel #3F4A44 #2F3A36
+    boden #5A4636 ab 640
+    lauf 70,780 1530,780 1570,965 30,965
+    marke start 200 880
+    marke bei_kessel 1100 830
+
+    rechteck 0 400 1600 240 #566A62 -
+    // Fenster mit Mond
+    rechteck 300 130 150 210 #16225A
+    rechteck 370 130 10 210 #3F4A44 -
+    rechteck 300 225 150 10 #3F4A44 -
+    kreis 340 180 20 #F6EBC4 -
+    // Regal
+    rechteck 560 260 340 14 #6B4A2E
+    kreis 610 300 22 #8A8A99
+    kreis 700 300 22 #8A8A99
+    kreis 790 300 22 #8A8A99
+    // Herd
+    rechteck 980 520 320 260 #2B2B33
+    rechteck 1050 600 180 120 #15151B
+    ellipse 1140 690 60 28 #FF8A2E -
+    // Tisch
+    rechteck 560 660 340 26 #6B4A2E
+    rechteck 590 686 22 100 #6B4A2E
+    rechteck 850 686 22 100 #6B4A2E
+
+    objekt tuer_halle "Tür zur Halle"
+        klickkasten 90 390 170 330
+        beschreibung "Die Tür zurück in die Halle."
+        rechteck 100 400 150 300 #6B3A22
+        rechteck 115 420 55 100 #5A2F1B
+        rechteck 180 420 55 100 #5A2F1B
+        kreis 232 560 9 #D8B04A
+        bei gehe:
+            raum halle von_kueche
+        bei oeffne:
+            raum halle von_kueche
+
+    objekt kerze_o "Kerzenstummel"
+        klickkasten 690 610 55 55
+        beschreibung "Ein Kerzenstummel auf dem Tisch. Nicht viel, aber mehr als nichts."
+        rechteck 700 628 26 32 #E8DDB5
+        rechteck 711 618 4 12 #3A2A1A -
+        bei nimm:
+            sage "Ein Stummel. Besser als gar nichts."
+            gib kerze
+            verstecke
+
+    objekt kessel "Kessel"
+        klickkasten 1040 400 200 170
+        ziel bei_kessel
+        beschreibung "Ein Kessel auf dem Herd. Er blubbert leise und riecht nach Gemüse von gestern."
+        pfad #3A3A46 "M1050 440 Q1040 540 1100 560 L1180 560 Q1240 540 1230 440 Z"
+        ellipse 1140 440 92 18 #55556A
+        ellipse 1140 442 78 12 #5EE07A -
+        kreis 1120 432 8 #8CFFA0 -
+        kreis 1165 436 6 #8CFFA0 -
+        bei schau:
+            wenn kette_gefunden:
+                sage "Nur noch Suppe. Und das Gefühl, etwas Gutes getan zu haben."
+            sonst:
+                sage "Ein Kessel auf dem Herd. In der Suppe glitzert etwas Metallisches."
+        bei benutze mit kelle:
+            wenn kette_gefunden:
+                sage "Mehr als Suppe finde ich da nicht."
+            sonst:
+                sage "Ich fische ein wenig im Kessel. Es klirrt."
+                warte 0.4
+                setze kette_gefunden
+                gib kette
+                sage "Eine Rasselkette! Wer kocht denn mit so etwas?"
+        bei nimm:
+            sage "Der Kessel ist heiß. Und er hat mir nichts getan."
+
+    objekt kelle_o "Schöpfkelle"
+        klickkasten 1330 240 90 220
+        beschreibung "Eine Schöpfkelle an der Wand. Sie hängt dort wie eine Einladung."
+        rechteck 1370 250 10 150 #B8B8C8
+        ellipse 1375 420 30 22 #B8B8C8
+        bei nimm:
+            sage "Die kann ich sicher noch gebrauchen."
+            gib kelle
+            verstecke
+
+    objekt gerda "Spinne Gerda"
+        klickkasten 740 200 120 100
+        beschreibung "Eine Spinne an einem Faden. Sie sieht mich an. Mit allen Augen."
+        pfad - #CFCFE8 dick 2 "M800 0 L800 225"
+        pfad - #1B1030 dick 4 "M785 245 L750 225 M785 255 L745 262 M815 245 L850 225 M815 255 L855 262"
+        kreis 800 250 22 #2B1B3B
+        kreis 792 244 5 #FFFFFF -
+        kreis 808 244 5 #FFFFFF -
+        bei rede:
+            dialog gerda
+        bei nimm:
+            sage "Gerda zieht sich ein Stück nach oben. Ich lasse sie lieber."
+
+// ======================================================================
+// Gespräche
+// ======================================================================
+
+dialog rabe
+    start:
+        wahl:
+            option "Hallo, Edgar. Schöne Federn.":
+                sage rabe "Kraah! Federn glänzen nicht. Knöpfe glänzen."
+                weiter start
+            option "Was weißt du über das Haus?":
+                sage rabe "Eine Kette fehlt. Ein Geist friert. Eine Spinne spinnt."
+                sage rabe "Mehr sage ich nicht. Ohne Gegenleistung."
+                weiter start
+            option "Hast du etwas für mich?":
+                sage rabe "Etwas Rostiges. Aber nur gegen etwas Glänzendes."
+                weiter start
+            option "Ich muss weiter.":
+                sage rabe "Kraah. Komm wieder, wenn es glänzt."
+                beende
+
+dialog knarz
+    start:
+        wahl:
+            option "Wer sind Sie?":
+                sage knarz "Ich bin Herr von Knarz. Das Haus gehört meiner Familie, mir gehört nur der Ärger."
+                weiter start
+            option "Warum spuken Sie hier?":
+                sage knarz "Meine Rasselkette ging verloren. Ohne Kette kein Spuk. Ohne Spuk keine Ruhe."
+                weiter start
+            option "Ich habe etwas gefunden." wenn hat kette:
+                sage knarz "Sie rasselt! Ich höre es! Gib sie mir, bitte. Sagt man das so?"
+                weiter start
+            option "Ich gehe wieder.":
+                sage knarz "Das tun sie alle. Aber du kommst zurück. Du bist die Erste, die meine Kette hat."
+                beende
+
+dialog gerda
+    start:
+        wahl:
+            option "Hallo, Gerda.":
+                sage gerda "Hallo, Besucher. Ich webe gerade. Störe nicht."
+                weiter start
+            option "Kennst du dich im Haus aus?":
+                sage gerda "Ich sehe alles. Von oben. Der Kessel ist nicht so leer, wie er aussieht."
+                weiter start
+            option "Tschüss.":
+                sage gerda "Tschüss. Ich bleibe hier. Ich habe Zeit."
+                beende
+
+// ======================================================================
+// Skripte
+// ======================================================================
+
+skript start:
+    zwischensequenz:
+        warte 0.5
+        sage "Halloween, Mitternacht, und ich habe keine Taschenlampe dabei."
+        sage "Das Haus soll voller Geister stecken. Perfekt für meine Reportage."
+        sage "Vielleicht kann ich mich hier irgendwie nützlich machen."
+
+skript rabe_tausch:
+    wenn hat knopf:
+        entferne knopf
+        sage rabe "Kraah! Glänzt! Meins!"
+        sage "Gern geschehen."
+        sage rabe "Dafür das hier. Rostig. Wie ich."
+        gib schluessel
+        setze rabe_zufrieden
+    sonst:
+        sage rabe "Ich warte auf etwas, das glänzt."
+
+skript anzuenden:
+    zwischensequenz:
+        sage "Streichholz, Kerze, Daumen drücken."
+        warte 0.6
+        setze halle_hell
+        warte 0.8
+        sage "Es wird hell. Und da steht jemand."
+        zeige knarz
+        warte 0.5
+        sage knarz "Buh."
+        sage "Das war eher ein Räuspern."
+        sage knarz "Ich übe noch."

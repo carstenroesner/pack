@@ -1,6 +1,6 @@
 # Knarz Manor – Funktionsumfang
 
-Stand: 31.10.2026
+Stand: 01.11.2026
 
 ## Spielidee
 - Point-and-Click-Adventure im Halloween-Spukhaus Knarz Manor.
@@ -8,48 +8,54 @@ Stand: 31.10.2026
 - Alle Figuren, Orte und Rätsel sind eigene Erfindungen.
 
 ## Steuerung
-- Verb-Leiste: Ansehen, Nehmen, Benutzen, Reden.
-- Verb wählen, dann auf eine Stelle in der Szene tippen.
-- Inventar: Gegenstand antippen, dann auf ein Ziel tippen (Benutzen mit).
-- Im Modus "Ansehen" beschreibt ein Tipp auf einen Inventar-Gegenstand diesen.
-- Dialoge mit Auswahlmöglichkeiten.
+- Klassische Verbtafel mit zwölf Verben in drei Spalten: Öffne, Schließe, Drücke, Ziehe, Gehe zu, Nimm, Rede mit, Gib, Benutze, Schau an, Mach an, Mach aus.
+- Die Satzzeile zeigt die Handlung, zum Beispiel "Benutze Gartenschere mit Hecke".
+- Verb wählen, dann ein Objekt in der Szene oder im Inventar antippen. Ein Tipp auf den Boden lässt Mina hingehen.
+- Langes Drücken oder Rechtsklick auf ein Objekt schaut es an, ohne ein Verb zu wählen.
+- Ein Tipp während eines Textes überspringt ihn, Zwischensequenzen haben einen Überspringen-Knopf.
+- Inventar rechts als Textliste mit Bildlauf-Pfeilen.
+- Dialoge mit Auswahlmöglichkeiten, jederzeit wiederholbar.
 
-## Inhalt (erster Prototyp)
-- 3 Szenen: Vorgarten, Eingangshalle, Küche.
-- 7 Gegenstände und eine durchgehende Rätselkette.
-- 2 sprechende Figuren: Rabe Edgar und Herr von Knarz.
+## Darstellung
+- Vektorgrafik in Comic-Optik, immer in der Auflösung des Geräts.
+- Retro-Ansicht im Menü: Die Szene wird in 400 Pixel Höhe ohne Kantenglättung und mit reduzierten Farben gezeichnet und scharf hochskaliert, wie bei 640×400.
+- Räume bestehen aus Einheiten statt Pixeln (Höhe 1000), das Bild bleibt in jeder Größe scharf.
+- Breite Räume scrollen, die Kamera folgt Mina.
+
+## Engine
+- Eigene Skriptsprache in einer Textdatei (assets/game/knarz.scr): Räume, Objekte, Gegenstände, Dialoge, Skripte und Zeichnungen.
+- Verbhandler pro Objekt, Kombinationen mit "mit" und "an", witzige Standardantworten pro Verb.
+- Skripte mit Warten, Sprechen und Gehen, Zwischensequenzen und Dialogbäume.
+- Alle Verweise werden beim Laden geprüft, Fehlermeldungen nennen die Zeile.
+- Spielstand speichern und laden, jederzeit außer während eines Skripts.
+- Gestaltungsprinzipien: keine Sackgassen (per Test geprüft), jedes Objekt hat einen Blicktext, jede Verb-Objekt-Kombination antwortet.
+
+## Inhalt
+- 3 Szenen: Vor dem Haus, Eingangshalle, Küche.
+- 7 Gegenstände, 18 Objekte und eine durchgehende Rätselkette.
+- 3 sprechende Figuren: Rabe Edgar, Herr von Knarz und Spinne Gerda.
 - Ein Ende mit Neustart-Möglichkeit.
 
-### Rätselkette (Lösungsweg)
-1. Vorgarten: Gartenschere nehmen, damit die Dornenhecke schneiden, Messingknopf erhalten.
-2. Knopf dem Raben Edgar geben, Rostigen Schlüssel erhalten, Haustür aufschließen.
-3. Halle: Streichhölzer nehmen. Die Halle ist dunkel.
-4. Küche: Kerzenstummel und Schöpfkelle nehmen, mit der Kelle die Rasselkette aus dem Hexenkessel fischen.
-5. Halle: Kerzenstummel auf den Kandelaber stecken, mit Streichhölzern anzünden, Herr von Knarz erscheint.
-6. Rasselkette an Herrn von Knarz geben: Ende.
-
 ## Menü (⋮)
-- Funktionsumfang: diese Übersicht, auch in der App einsehbar.
-- Problem melden: öffnet ein vorausgefülltes GitHub-Issue (Problem oder Anregung).
+- Spiel speichern und Spiel laden.
+- Neu starten.
+- Retro-Ansicht an oder aus.
+- Funktionsumfang: diese Übersicht.
+- Problem melden: öffnet ein vorausgefülltes GitHub-Issue.
 - Über diese App.
 
 ## Technik
 - Flutter mit Material 3 und Provider.
-- Automatischer Web-Deploy per GitHub Actions auf GitHub Pages (`.github/workflows/deploy-web.yml`).
-- Automatische Tests (`flutter test`) bei jedem Push, Deploy nur bei grünen Tests.
+- Spielstand und Einstellungen über shared_preferences.
+- Automatischer Web-Deploy per GitHub Actions auf GitHub Pages.
+- Automatische Tests bei jedem Push: Tokenizer, Parser, Engine, kompletter Durchspieltest und Oberfläche.
 
-## Umsetzungsstand
-- Live unter https://carstenroesner.github.io/point_and_click_adventure/ (Stand 01.11.2026).
-- CI-Lauf grün: 11 Tests (7 Spiellogik, 4 Widget), Web-Build und Deploy per GitHub Actions.
-- Im Browser verifiziert: Vorgarten wird gezeichnet, Verb-Leiste und Inventar funktionieren.
-- Noch nicht von Hand durchgespielt: das komplette Spiel bis zum Ende (der Durchlauf ist durch einen automatischen Test abgedeckt).
-
-## Backlog
-- Spielstand speichern.
-- Eigene Illustrationen statt Symbolen.
+## Geplant
+- Eigene Illustrationen als Rasterebenen zusätzlich zu den Vektorformen.
+- Mehrere Spielstände.
 - Sound und Musik.
 - Weitere Kapitel.
 
 ## Änderungshistorie
-- 31.10.2026: Erster Prototyp (3 Szenen, 7 Gegenstände, 2 Dialoge, Standard-Menü, Tests, CI-Workflow).
-- 01.11.2026: Repo angelegt und gepusht. Hotspot-Felder vergrößert, weil Symbol und Beschriftung um 5 Pixel überliefen und alle vier Widget-Tests scheiterten. CI grün, live verifiziert.
+- 31.10.2026: Erster Prototyp mit Standard-Menü und CI-Workflow.
+- 01.11.2026: Eigene Engine mit Skriptsprache, SCUMM-Oberfläche, Vektorgrafik, Retro-Ansicht und Speicherfunktion.
