@@ -12,6 +12,15 @@ void settle(GameEngine e) {
   expect(n, lessThan(30000), reason: 'Ein Skript endet nicht');
 }
 
+/// Beendet offene Gespräche über die letzte Antwort (immer "Tschüss").
+void leaveDialogs(GameEngine e) {
+  var n = 0;
+  while (e.choices != null && n++ < 20) {
+    e.chooseOption(e.choices!.length - 1);
+    settle(e);
+  }
+}
+
 void act(GameEngine e, String verb, String a, [String? b]) {
   expect(e.canInteract, isTrue, reason: 'Eingabe gesperrt bei $verb $a');
   e.selectVerb(verb);
@@ -67,6 +76,7 @@ void main() {
 
   test('Zwischensequenzen lassen sich überspringen', () {
     final e = GameEngine(parseGame(loadSource()));
+    e.tick(1 / 60);
     expect(e.inCutscene, isTrue);
     e.skipCutscene();
     e.tick(1 / 60);
@@ -97,6 +107,7 @@ void main() {
           e.selectVerb(v.id);
           e.target(o.id);
           settle(e);
+          leaveDialogs(e);
           expect(e.busy, isFalse, reason: '${v.id} ${o.id}');
         }
       }

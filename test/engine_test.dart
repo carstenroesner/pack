@@ -9,6 +9,7 @@ spieler ich
 verb gehe "Gehe zu"
 verb schau "Schau an"
 verb nimm "Nimm"
+verb rede "Rede mit"
 verb benutze "Benutze" mit "mit"
 figur ich "Ich" farbe #FF0000
 gegenstand schluessel "Schlüssel"
@@ -113,9 +114,22 @@ void main() {
     e.selectVerb('gehe');
     e.target('geist');
     settle(e);
-    e.selectVerb('gehe');
-    // Dialog: Gesprächsverb fehlt im Mini-Spiel, daher direkt per Handler prüfen.
-    expect(e.room.objects.first.id, 'geist');
+    e.selectVerb('rede');
+    e.target('geist');
+    var n = 0;
+    while (e.choices == null && n++ < 5000) {
+      e.tick(1 / 60);
+    }
+    expect(e.choices, isNotNull);
+    e.chooseOption(0);
+    n = 0;
+    while (e.choices == null && n++ < 5000) {
+      e.tick(1 / 60);
+    }
+    expect(e.choices, isNotNull, reason: 'Nach der Antwort kommt die Auswahl wieder');
+    e.chooseOption(1);
+    settle(e);
+    expect(e.busy, isFalse);
   });
 
   test('Speichern und Laden stellt den Stand her', () {

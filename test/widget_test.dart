@@ -25,9 +25,10 @@ Future<void> startApp(WidgetTester tester) async {
 void main() {
   testWidgets('Startbildschirm zeigt Verbtafel und leeres Inventar', (tester) async {
     await startApp(tester);
-    for (final label in ['Öffne', 'Gehe zu', 'Nimm', 'Rede mit', 'Benutze', 'Schau an']) {
-      expect(find.text(label), findsOneWidget, reason: label);
+    for (final id in ['oeffne', 'gehe', 'nimm', 'rede', 'benutze', 'schau', 'mach_aus']) {
+      expect(find.byKey(ValueKey('verb_$id')), findsOneWidget, reason: id);
     }
+    expect(find.text('Rede mit'), findsOneWidget);
     expect(find.text('Nichts dabei'), findsOneWidget);
     expect(find.text('Vor dem Haus'), findsOneWidget);
   });
