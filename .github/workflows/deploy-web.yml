@@ -33,7 +33,14 @@ jobs:
       - run: flutter pub get
 
       - name: Tests
-        run: flutter test
+        run: |
+          set +e
+          flutter test --reporter expanded > test.log 2>&1
+          code=$?
+          if [ $code -ne 0 ]; then
+            grep -A7 "\[E\]" test.log | head -c 5000 | sed ':a;N;$!ba;s/\n/%0A/g' | fold -w 480 | head -10 | while IFS= read -r line; do echo "::error::$line"; done
+          fi
+          exit $code
 
       - name: Web-Build
         run: flutter build web --release --base-href /point_and_click_adventure/
