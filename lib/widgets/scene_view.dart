@@ -9,7 +9,7 @@ class SceneView extends StatelessWidget {
   const SceneView({super.key});
 
   static const double _spotWidth = 92;
-  static const double _spotHeight = 78;
+  static const double _spotHeight = 92;
 
   /// Begrenzt die Position auf den sichtbaren Bereich.
   static double _place(double value, double max) {
@@ -75,7 +75,7 @@ class _HotspotButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(spot.emoji, style: const TextStyle(fontSize: 36)),
+          Text(spot.emoji, style: const TextStyle(fontSize: 32)),
           Text(
             spot.label,
             textAlign: TextAlign.center,

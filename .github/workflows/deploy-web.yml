@@ -33,19 +33,7 @@ jobs:
       - run: flutter pub get
 
       - name: Tests
-        run: |
-          set +e
-          flutter test --reporter expanded > test.log 2>&1
-          code=$?
-          python3 -c "
-          import re
-          t=open('test.log').read().replace(chr(13),'')
-          lines=[l for l in t.split(chr(10)) if not re.match(r'^\\d\\d:\\d\\d \\+\\d+(:|\\s*$)', l) or '[E]' in l]
-          out=chr(10).join(lines)
-          for i in range(0, min(len(out), 20000), 3500):
-              print('::error::' + out[i:i+3500].replace('%','%25').replace(chr(10),'%0A'))
-          "
-          exit $code
+        run: flutter test
 
       - name: Web-Build
         run: flutter build web --release --base-href /point_and_click_adventure/
