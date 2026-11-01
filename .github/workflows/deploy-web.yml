@@ -33,7 +33,7 @@ jobs:
       - run: flutter pub get
 
       - name: Tests
-        run: flutter test
+        run: flutter test --reporter github
 
       - name: Web-Build
         run: flutter build web --release --base-href /point_and_click_adventure/
