@@ -39,8 +39,10 @@ Stand: 31.10.2026
 - Automatische Tests (`flutter test`) bei jedem Push, Deploy nur bei grünen Tests.
 
 ## Umsetzungsstand
-- Spiel-Engine, Inhalte, Menü, Tests und Workflow geschrieben.
-- Noch offen: erster CI-Lauf und Live-Verifikation im Browser (lokal war kein Flutter-SDK verfügbar, der Code ist bisher nicht kompiliert).
+- Live unter https://carstenroesner.github.io/point_and_click_adventure/ (Stand 01.11.2026).
+- CI-Lauf grün: 11 Tests (7 Spiellogik, 4 Widget), Web-Build und Deploy per GitHub Actions.
+- Im Browser verifiziert: Vorgarten wird gezeichnet, Verb-Leiste und Inventar funktionieren.
+- Noch nicht von Hand durchgespielt: das komplette Spiel bis zum Ende (der Durchlauf ist durch einen automatischen Test abgedeckt).
 
 ## Backlog
 - Spielstand speichern.
@@ -50,3 +52,4 @@ Stand: 31.10.2026
 
 ## Änderungshistorie
 - 31.10.2026: Erster Prototyp (3 Szenen, 7 Gegenstände, 2 Dialoge, Standard-Menü, Tests, CI-Workflow).
+- 01.11.2026: Repo angelegt und gepusht. Hotspot-Felder vergrößert, weil Symbol und Beschriftung um 5 Pixel überliefen und alle vier Widget-Tests scheiterten. CI grün, live verifiziert.
