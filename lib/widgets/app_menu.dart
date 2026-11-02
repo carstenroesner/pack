@@ -5,14 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app/game_info.dart';
 import '../engine/engine.dart';
 import '../screens/feature_overview_screen.dart';
 import '../services/game_settings.dart';
 
-const String _saveKey = 'knarz_savegame';
-
-const String _repoOwner = 'carstenroesner';
-const String _repoName = 'point_and_click_adventure';
 
 /// Standard-Menü (⋮): Funktionsumfang, Problem melden, Über diese App.
 class AppMenu extends StatelessWidget {
@@ -20,6 +17,7 @@ class AppMenu extends StatelessWidget {
 
   Future<void> _save(BuildContext context) async {
     final engine = context.read<GameEngine>();
+    final saveKey = '${context.read<GameInfo>().storageKey}_savegame';
     final messenger = ScaffoldMessenger.of(context);
     if (!engine.canSave) {
       messenger.showSnackBar(const SnackBar(content: Text('Gerade nicht möglich.')));
@@ -27,7 +25,7 @@ class AppMenu extends StatelessWidget {
     }
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_saveKey, jsonEncode(engine.toJson()));
+      await prefs.setString(saveKey, jsonEncode(engine.toJson()));
       messenger.showSnackBar(const SnackBar(content: Text('Gespeichert.')));
     } catch (_) {
       messenger.showSnackBar(const SnackBar(content: Text('Speichern ist fehlgeschlagen.')));
@@ -36,10 +34,11 @@ class AppMenu extends StatelessWidget {
 
   Future<void> _load(BuildContext context) async {
     final engine = context.read<GameEngine>();
+    final saveKey = '${context.read<GameInfo>().storageKey}_savegame';
     final messenger = ScaffoldMessenger.of(context);
     try {
       final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString(_saveKey);
+      final raw = prefs.getString(saveKey);
       if (raw == null) {
         messenger.showSnackBar(const SnackBar(content: Text('Kein Spielstand vorhanden.')));
         return;
@@ -115,10 +114,11 @@ class _AboutDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final info = context.read<GameInfo>();
     return AlertDialog(
-      title: const Text('Über Knarz Manor'),
+      title: Text('Über ${info.title}'),
       content: Text(
-        'Ein Point-and-Click-Adventure im Halloween-Spukhaus.\n\n'
+        '${info.about}\n\n'
         '© ${DateTime.now().year} Carsten Rösner',
       ),
       actions: [
@@ -152,9 +152,10 @@ class _ReportDialogState extends State<_ReportDialog> {
 
   Future<void> _openIssue() async {
     final navigator = Navigator.of(context);
+    final info = context.read<GameInfo>();
     final uri = Uri.https(
       'github.com',
-      '/$_repoOwner/$_repoName/issues/new',
+      '/${info.repoOwner}/${info.repoName}/issues/new',
       {
         'title': _title.text.trim(),
         'body': _body.text.trim(),

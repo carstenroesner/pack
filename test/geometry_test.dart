@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:point_and_click_adventure/engine/geometry.dart';
-import 'package:point_and_click_adventure/engine/path_data.dart';
+import 'package:pack/engine/geometry.dart';
+import 'package:pack/engine/path_data.dart';
 
 void main() {
   final square = Polygon.box(0, 0, 100, 100);

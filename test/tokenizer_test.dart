@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:point_and_click_adventure/engine/script_error.dart';
-import 'package:point_and_click_adventure/engine/tokenizer.dart';
+import 'package:pack/engine/script_error.dart';
+import 'package:pack/engine/tokenizer.dart';
 
 void main() {
   test('Wörter, Texte und Doppelpunkt werden getrennt', () {

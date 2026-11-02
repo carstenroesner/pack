@@ -3,9 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Einstellungen der Darstellung, zum Beispiel die Retro-Ansicht.
 class GameSettings extends ChangeNotifier {
-  GameSettings({bool retro = false}) : _retro = retro;
+  GameSettings({bool retro = false, this.storageKey = 'pack'}) : _retro = retro;
 
-  static const String _retroKey = 'knarz_retro';
+  /// Vorsilbe für gespeicherte Werte, damit sich Spiele nicht stören.
+  final String storageKey;
+  String get _retroKey => '${storageKey}_retro';
   bool _retro;
 
   bool get retro => _retro;

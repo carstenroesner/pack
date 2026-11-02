@@ -1,61 +1,50 @@
-# Knarz Manor – Funktionsumfang
+# PACK – Funktionsumfang
 
-Stand: 01.11.2026
+Stand: 02.11.2026
 
-## Spielidee
-- Point-and-Click-Adventure im Halloween-Spukhaus Knarz Manor.
-- Du spielst Mina Moderschein, Geisterjägerin im Praktikum.
-- Alle Figuren, Orte und Rätsel sind eigene Erfindungen.
+## Zweck
+- PACK ist das Premium Adventure Creation Kit: eine wiederverwendbare Engine für Point-and-Click-Adventures im SCUMM-Stil.
+- Die Engine enthält keinen Spielinhalt; jedes Spiel liegt in einem eigenen Repository und bindet PACK als Flutter-Paket ein.
+- Läuft im Web, auf iOS und auf Android aus einer Codebasis.
 
-## Steuerung
-- Klassische Verbtafel mit zwölf Verben in drei Spalten: Öffne, Schließe, Drücke, Ziehe, Gehe zu, Nimm, Rede mit, Gib, Benutze, Schau an, Mach an, Mach aus.
-- Die Satzzeile zeigt die Handlung, zum Beispiel "Benutze Gartenschere mit Hecke".
-- Verb wählen, dann ein Objekt in der Szene oder im Inventar antippen. Ein Tipp auf den Boden lässt Mina hingehen.
-- Langes Drücken oder Rechtsklick auf ein Objekt schaut es an, ohne ein Verb zu wählen.
-- Ein Tipp während eines Textes überspringt ihn, Zwischensequenzen haben einen Überspringen-Knopf.
-- Inventar rechts als Textliste mit Bildlauf-Pfeilen.
-- Dialoge mit Auswahlmöglichkeiten, jederzeit wiederholbar.
+## Skriptsprache
+- Eigene Textsprache mit deutschen Schlüsselwörtern: Räume, Objekte, Gegenstände, Verben, Figuren, Dialoge, Skripte und Zeichnungen.
+- Verbhandler pro Objekt, Kombinationen mit zweitem Objekt, Standardantworten pro Verb.
+- Skripte mit Warten, Sprechen und Gehen, Bedingungen, Zwischensequenzen, Dialogbäume und Spielende.
+- Alle Verweise werden beim Laden geprüft, Fehlermeldungen nennen die Zeile.
 
 ## Darstellung
-- Vektorgrafik in Comic-Optik, immer in der Auflösung des Geräts.
-- Retro-Ansicht im Menü: Die Szene wird in 400 Pixel Höhe ohne Kantenglättung und mit reduzierten Farben gezeichnet und scharf hochskaliert, wie bei 640×400.
-- Räume bestehen aus Einheiten statt Pixeln (Höhe 1000), das Bild bleibt in jeder Größe scharf.
-- Breite Räume scrollen, die Kamera folgt Mina.
+- Vektorgrafik aus Formen (Kreis, Ellipse, Rechteck, Vieleck, Pfad) in Raumeinheiten, Raumhöhe 1000; bleibt in jeder Auflösung scharf.
+- Retro-Ansicht: Rendern in 400 Pixel Höhe ohne Kantenglättung, mit reduzierter Farbpalette, scharf hochskaliert.
+- Scrollende Räume mit Kamera, Lauf- und Klickflächen als Polygone, bedingte Formen und Vordergrundformen.
+- Mitgelieferte Spielfigur im Comic-Stil mit Lauf- und Wippanimation.
 
-## Engine
-- Eigene Skriptsprache in einer Textdatei (assets/game/knarz.scr): Räume, Objekte, Gegenstände, Dialoge, Skripte und Zeichnungen.
-- Verbhandler pro Objekt, Kombinationen mit "mit" und "an", witzige Standardantworten pro Verb.
-- Skripte mit Warten, Sprechen und Gehen, Zwischensequenzen und Dialogbäume.
-- Alle Verweise werden beim Laden geprüft, Fehlermeldungen nennen die Zeile.
-- Spielstand speichern und laden, jederzeit außer während eines Skripts.
-- Gestaltungsprinzipien: keine Sackgassen (per Test geprüft), jedes Objekt hat einen Blicktext, jede Verb-Objekt-Kombination antwortet.
+## Oberfläche
+- Klassische Verbtafel mit konfigurierbaren Verben, Satzzeile und Textinventar mit Bildlaufpfeilen.
+- Langes Drücken oder Rechtsklick schaut ein Objekt an; Tipp überspringt Texte, Zwischensequenzen lassen sich überspringen.
+- Menü (⋮): Spiel speichern, Spiel laden, Neu starten, Retro-Ansicht, Funktionsumfang, Problem melden, Über diese App.
+- Spielstand und Einstellungen über shared_preferences, getrennt je Spiel.
 
-## Inhalt
-- 3 Szenen: Vor dem Haus, Eingangshalle, Küche.
-- 7 Gegenstände, 18 Objekte und eine durchgehende Rätselkette.
-- 3 sprechende Figuren: Rabe Edgar, Herr von Knarz und Spinne Gerda.
-- Ein Ende mit Neustart-Möglichkeit.
+## Einbindung
+- Ein Spiel liefert nur Skript, Assets und eine GameInfo (Titel, Über-Text, Repository, Funktionsumfang) und startet PackApp.
+- Die App-Hülle PackApp lädt das Skript und stellt Oberfläche, Menü und Funktionsumfang bereit.
 
-## Menü (⋮)
-- Spiel speichern und Spiel laden.
-- Neu starten.
-- Retro-Ansicht an oder aus.
-- Funktionsumfang: diese Übersicht.
-- Problem melden: öffnet ein vorausgefülltes GitHub-Issue.
-- Über diese App.
+## Gestaltungsprinzipien
+- Keine Sackgassen und kein Tod; per Test prüfbar.
+- Jedes Objekt hat einen Blicktext, jede Verb-Objekt-Kombination antwortet.
+- Dialoge sind wiederholbar, Speichern ist jederzeit möglich.
+- Sammlung von Rätselmustern und Ideen: siehe Ideen-Datenbank im Projekt.
 
 ## Technik
-- Flutter mit Material 3 und Provider.
-- Spielstand und Einstellungen über shared_preferences.
-- Automatischer Web-Deploy per GitHub Actions auf GitHub Pages.
-- Automatische Tests bei jedem Push: Tokenizer, Parser, Engine, kompletter Durchspieltest und Oberfläche.
+- Flutter mit Material 3 und Provider; Engine läuft in festen Zeitschritten (reproduzierbar testbar).
+- Automatische Tests bei jedem Push: Tokenizer, Parser, Geometrie, Engine und Oberflächen-Hülle mit einem Mini-Spiel.
 
 ## Geplant
-- Eigene Illustrationen als Rasterebenen zusätzlich zu den Vektorformen.
+- Duelle (Beleidigungsfechten), mehrere spielbare Figuren, abgestufte Hinweise, Journal mit Zielen.
+- Rasterebenen zusätzlich zu den Vektorformen.
 - Mehrere Spielstände.
-- Sound und Musik.
-- Weitere Kapitel.
 
 ## Änderungshistorie
-- 31.10.2026: Erster Prototyp mit Standard-Menü und CI-Workflow.
-- 01.11.2026: Eigene Engine mit Skriptsprache, SCUMM-Oberfläche, Vektorgrafik, Retro-Ansicht und Speicherfunktion.
+- 31.10.2026: Erster Prototyp als Teil eines Spiels.
+- 01.11.2026: Engine mit Skriptsprache, Vektorgrafik und Retro-Ansicht.
+- 02.11.2026: Als eigenständiges Paket PACK herausgelöst, Spiele in eigene Repositories.

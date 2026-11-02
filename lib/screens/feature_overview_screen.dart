@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../content/feature_overview_content.dart';
+import 'package:provider/provider.dart';
+
+import '../app/game_info.dart';
 
 /// In-App-Ansicht des Funktionsumfangs (spiegelt FUNKTIONSUMFANG.md).
 class FeatureOverviewScreen extends StatelessWidget {
@@ -8,15 +10,16 @@ class FeatureOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final info = context.read<GameInfo>();
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(title: const Text('Funktionsumfang')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text('Stand: $featureOverviewStand', style: textTheme.labelMedium),
+          Text('Stand: ${info.featureStand}', style: textTheme.labelMedium),
           const SizedBox(height: 12),
-          for (final section in featureSections)
+          for (final section in info.featureSections)
             Card(
               margin: const EdgeInsets.only(bottom: 12),
               child: Padding(

@@ -1,5 +1,5 @@
-name: point_and_click_adventure
-description: "Knarz Manor - ein Point-and-Click-Adventure im Halloween-Spukhaus."
+name: pack
+description: "PACK, das Premium Adventure Creation Kit: Skriptsprache, Interpreter, Vektor-Renderer und Oberfläche für Point-and-Click-Adventures."
 publish_to: "none"
 version: 0.1.0+1
 
@@ -19,5 +19,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/game/
